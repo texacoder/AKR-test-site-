@@ -3,21 +3,85 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A simple start page with quick links to popular websites.">
+  <meta name="description" content="An app-store style start page with quick links to popular websites.">
   <!-- No third-party requests: no trackers, fonts, or remote icons. -->
   <meta name="referrer" content="no-referrer">
   <title>AKR Portal</title>
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-  <header class="top">
-    <h1>AKR Portal</h1>
-    <p class="tagline">Quick links to the sites you use every day.</p>
-    <input id="search" type="search" placeholder="Filter sites…  (press / to focus)" autocomplete="off" aria-label="Filter sites">
+  <header class="appbar">
+    <div class="appbar-row">
+      <a class="brand" href="#" data-tab="home"><span class="brand-mark">A</span><span class="brand-name">AKR Portal</span></a>
+      <label class="searchbox">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.8l-.3-.3A6.5 6.5 0 1 0 14 15.5l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg>
+        <input id="search" type="search" placeholder="Search for apps" autocomplete="off" aria-label="Search for apps">
+      </label>
+      <button class="icon-btn" id="open-settings" aria-label="Settings" title="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.9a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.9a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)"/></svg>
+      </button>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="home" aria-selected="true">For you</button>
+      <button role="tab" data-tab="categories" aria-selected="false">Categories</button>
+      <button role="tab" data-tab="library" aria-selected="false">My apps</button>
+    </nav>
   </header>
 
-  <main id="portal" aria-live="polite"></main>
-  <p id="empty" class="empty" hidden>No sites match your filter.</p>
+  <main id="view" aria-live="polite"></main>
+
+  <!-- App details sheet -->
+  <dialog id="details" class="sheet">
+    <form method="dialog" class="sheet-close"><button aria-label="Close">✕</button></form>
+    <div class="detail-head">
+      <span class="icon icon-lg" id="d-icon"></span>
+      <div>
+        <h2 id="d-name"></h2>
+        <p class="d-domain" id="d-domain"></p>
+        <p class="d-cat" id="d-cat"></p>
+      </div>
+    </div>
+    <div class="detail-actions">
+      <a class="btn-primary" id="d-open" rel="noopener noreferrer">Open</a>
+      <button class="btn-outline" id="d-fav"></button>
+    </div>
+    <h3>About this site</h3>
+    <p id="d-desc"></p>
+    <p class="hint">Opens the official website. If you're already signed in to it in this browser, you'll stay signed in.</p>
+  </dialog>
+
+  <!-- Settings -->
+  <dialog id="settings" class="sheet">
+    <form method="dialog" class="sheet-close"><button aria-label="Close">✕</button></form>
+    <h2>Settings</h2>
+
+    <div class="setting">
+      <div><strong>Theme</strong><small>Match your device, or pick one.</small></div>
+      <select id="s-theme">
+        <option value="system">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    </div>
+    <div class="setting">
+      <div><strong>Open apps in a new tab</strong><small>Off opens them in this tab.</small></div>
+      <input type="checkbox" id="s-newtab" class="switch">
+    </div>
+    <div class="setting">
+      <div><strong>Show recently opened</strong><small>Keep a "Recently opened" row on the For you tab.</small></div>
+      <input type="checkbox" id="s-recent" class="switch">
+    </div>
+    <div class="setting">
+      <div><strong>Skip the details page</strong><small>Tapping an app opens the site right away.</small></div>
+      <input type="checkbox" id="s-direct" class="switch">
+    </div>
+
+    <div class="setting-actions">
+      <button class="btn-outline" id="s-clear-recent">Clear recent</button>
+      <button class="btn-outline danger" id="s-reset">Reset everything</button>
+    </div>
+    <p class="hint">Settings, favorites and recents are saved only in this browser.</p>
+  </dialog>
 
   <footer class="foot">
     <p>
@@ -25,7 +89,7 @@
       any of the websites listed. All product names and trademarks belong to their respective owners
       and are used here only to identify the linked sites.
     </p>
-    <p>This page uses no cookies, analytics, or tracking. Links open the official sites in a new tab.</p>
+    <p>This page uses no cookies, analytics, or tracking. Your preferences are stored only on your device.</p>
   </footer>
 
   <script src="assets/sites.js"></script>
